@@ -13,20 +13,59 @@
 # Imports necessários
 #########################
 import tkinter as tk
+from tkinter.ttk import *
+from igraph import *
 
 
 #########################
 # Criando a aplicação
 #########################
 class Application:
+
+    # declaring string variable
+    # for storing name and password 
+
+    def grafo(self):
+       texto = ""
+       v=n_vertice.get()
+       a=n_aresta.get()
+       
+       eG=Graph(directed=False)
+       eG.add_vertices(6)
+       eG.add_edges([(0,1),(1,2),(2,3),(3,4),(3,5),(5,3)])
+       eG.es['weight']=[12,1,2,3,4,1]
+
+       layout = eG.layout("kk")
+
+       visual_style = {}
+       visual_style["vertex_size"] = 20
+       visual_style["vertex_label"] = ["a","b","c","d","e","f"]
+       visual_style["edge_width"] = eG.es['weight']
+       visual_style["bbox"] = (300, 300)
+       plot(eG, **visual_style)
+       texto = ("Grafo gerado com ", v ," vértices e as seguintes arestas: ", a)
+       labelExample = tk.Label(root, text=texto).place(x = 40, y = 160)
+
     def doAlgo(self):
-       retorno = teste()
-       #print(retorno)
-       labelExample = tk.Label(text=retorno)
-       labelExample.pack()
+       # label e input da quantidade de vértices 
+       qtd_vertices = Label(root, text = "Informe a quantidade de vértices:").place(x = 40, y = 60)  
+       qtd_vertices_input_area = Entry(root, textvariable = n_vertice, width = 10).place(x = 230,y = 60) 
+
+       
+       # label e input das arestas 
+       arestas = Label(root, text = "Infome as arestas:").place(x = 40, y = 100)
+       Label(root, text = "Exemplo de preenchimento: (0,1),(1,2),(2,3),(3,4),(3,5),(5,3)").place(x = 220, y = 120)
+       
+       arestas_input_area = Entry(root, textvariable = n_aresta, width = 30).place(x = 230, y = 100)
+
+       #Chama a função de criar o grafo
+       submit_button = Button(root, text = "Submit", command =self.grafo).place(x = 40, y = 130)
+
+
+       
 
     def donothing(self):
-        labelExample = tk.Label(text=" ")
+        labelExample = tk.Label(root,text=" entei aqui ")
         labelExample.pack()
        
     def __init__(self, master=None):
@@ -34,7 +73,7 @@ class Application:
         #Criando o título do frame
         root.title("Sobrevivência de Rede")
         #Setando o tamanho do frame
-        root.geometry('400x300')
+        root.geometry('600x300')
 
         #Criando o Menu de opções
         menubar = tk.Menu(root)
@@ -125,6 +164,12 @@ def teste():
 #########################
 if __name__ == "__main__":
     #teste()
+    #Criando a janela principal
     root = tk.Tk()
+
+    n_vertice=tk.StringVar()
+    n_aresta=tk.StringVar()
+
+    #Criando o frame da janela principal
     Application(root)
     
