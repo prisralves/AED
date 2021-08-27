@@ -22,7 +22,9 @@ from igraph import *
 # segundo PLOT DE GRAFOS
 import matplotlib.pyplot as plt
 import networkx as nx # para funcionar o networkx é necessário pip install decorator==5.0.7
-
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 #########################
 # Criando a aplicação
@@ -32,11 +34,57 @@ class Application:
     #Funcção que cria o grafo conexo
     def criaGrafo(self):
         texto = ""
+        a=[]
         v=n_vertice.get()
-        a=n_aresta.get()
+        a=n_aresta.get().split('\)\', \'\(')
+        print("a = ", a)
+        print("\a[0] = ", a[0])
+        print("\a[-1] = ", a[-1])
+        
+        G = nx.Graph()
 
-       
+        G.add_edge("a", "b", weight=0.6)
+        G.add_edge("a", "c", weight=0.2)
+        G.add_edge("c", "d", weight=0.1)
+        G.add_edge("c", "e", weight=0.7)
+        G.add_edge("c", "f", weight=0.9)
+        G.add_edge("a", "d", weight=0.3)
+        G.add_edge("b", "f", weight=0.1)
+        G.add_edge("a", "e", weight=0.8)
 
+
+        elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d["weight"] > 0.5]
+        #print(elarge)
+        esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d["weight"] <= 0.5]
+        #print(esmall)
+        pos = nx.spring_layout(G, seed=7)  # positions for all nodes - seed for reproducibility
+        #print("pos = ",pos)
+        # nodes
+        nx.draw_networkx_nodes(G, pos, node_size=700)
+
+        # edges
+        nx.draw_networkx_edges(G, pos, edgelist=elarge, width=6)
+        nx.draw_networkx_edges(G, pos, edgelist=esmall, width=6, alpha=0.5, edge_color="b", style="dashed")
+
+        # labels
+        nx.draw_networkx_labels(G, pos, font_size=20, font_family="sans-serif")
+
+        ax = plt.gca()
+        ax.margins(0.08)
+        plt.axis("off")
+        plt.tight_layout()
+        plt.show()
+
+        '''     
+        f = plt.figure(figsize=(5, 4))
+        plt.axis('off')
+
+        G = nx.from_numpy_array(matrix)
+        pos = nx.circular_layout(G)
+        nx.draw_networkx(G, pos=pos)
+        canvas = FigureCanvasTkAgg(f, master=root)
+        canvas.get_tk_widget().pack(side='bottom', fill='both', expand=1) 
+        '''
         texto = ("Grafo gerado com ", v ," vértices e as seguintes arestas: ", a)
         texto = tk.Label(root, text=texto).place(x = 40, y = 160)
 
