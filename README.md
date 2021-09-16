@@ -1,4 +1,4 @@
-# AED
+# AED - Algoritmos e Estruturas de Dados
 Projeto Final - ND21
 
 Heurística para uma Análise de Sobrevivência de Rede
